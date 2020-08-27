@@ -15,8 +15,7 @@ class CommandRunner(object):
 
 class Result(object):
 
-    def __init__(self, success, code, out, err):
+    def __init__(self, success, code, out):
         self.success = success
         self.code = code
         self.out = out
-        self.err = err
