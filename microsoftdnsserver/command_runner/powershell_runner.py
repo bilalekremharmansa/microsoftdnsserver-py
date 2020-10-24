@@ -4,7 +4,7 @@ import sys
 from .runner import Command, CommandRunner, Result
 
 
-class PowershellCommand(Command):
+class PowerShellCommand(Command):
 
     def __init__(self, cmdlet, *flags, **args):
         super().__init__()
@@ -34,10 +34,10 @@ class PowershellCommand(Command):
         pass
 
 
-class PowershellRunner(CommandRunner):
+class PowerShellRunner(CommandRunner):
 
     def run(self, command):
-        assert (command, PowershellCommand)
+        assert (command, PowerShellCommand)
 
         cmd = command.prepareCommand()
 

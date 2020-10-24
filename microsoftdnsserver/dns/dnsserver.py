@@ -1,4 +1,4 @@
-from microsoftdnsserver.command_runner.powershell_runner import PowershellCommand
+from microsoftdnsserver.command_runner.powershell_runner import PowerShellCommand
 from .base import DNSService
 
 
@@ -26,14 +26,14 @@ class DnsServerModule(DNSService):
         if recordType:
             args['RRType'] = recordType
 
-        command = PowershellCommand('Get-DnsServerResourceRecord', **args)
+        command = PowerShellCommand('Get-DnsServerResourceRecord', **args)
         result = self.runner(command)
 
 
     def addARecord(self, zone, name, ip, ttl='1h', ageRecord=False):
         """ uses Add-DnsServerResourceRecordA cmdlet to add a resource in a zone """
 
-        command = PowershellCommand(
+        command = PowerShellCommand(
             'Add-DnsServerResourceRecordA',
             'AllowUpdateAny',
             ZoneName=zone,
@@ -57,7 +57,7 @@ class DnsServerModule(DNSService):
 
         flags = ['Force']
 
-        command = PowershellCommand('Remove-DnsServerResourceRecord', *flags, **args)
+        command = PowerShellCommand('Remove-DnsServerResourceRecord', *flags, **args)
         result = self.runner(command)
 
 
