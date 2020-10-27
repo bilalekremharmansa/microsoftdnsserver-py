@@ -3,7 +3,9 @@ import sys
 
 from .runner import Command, CommandRunner, Result
 
-DEBUG=True
+DEBUG = True
+
+POWERSHELL_EXE_PATH="C:\Windows\syswow64\WindowsPowerShell\\v1.0\powershell.exe"
 
 class PowerShellCommand(Command):
 
@@ -15,7 +17,7 @@ class PowerShellCommand(Command):
         self.args = args
 
     def prepareCommand(self):
-        cmd = ['powershell.exe', self.cmdlet]
+        cmd = [POWERSHELL_EXE_PATH, self.cmdlet]
 
         # add flags, ie -Force
         for flag in self.flags:
