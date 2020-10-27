@@ -3,6 +3,7 @@ import sys
 
 from .runner import Command, CommandRunner, Result
 
+DEBUG=True
 
 class PowerShellCommand(Command):
 
@@ -21,7 +22,7 @@ class PowerShellCommand(Command):
             cmd.append('-%s' % flag)
 
         # add arguments
-        for arg, value in self.args:
+        for arg, value in self.args.items():
             cmd.append('-%s %s' % (arg, value))
 
         # convert to json to make machine readable
@@ -40,6 +41,10 @@ class PowerShellRunner(CommandRunner):
         assert (command, PowerShellCommand)
 
         cmd = command.prepareCommand()
+
+        if DEBUG:
+            print(' '.join(cmd))
+            return
 
         proc = subprocess.Popen(cmd, stdout=sys.stdout)
         try:

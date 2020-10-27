@@ -42,7 +42,7 @@ class DnsServerModule(DNSService):
             TimeToLive=self._formatTtl(ttl)
         )
 
-        result = self.runner(command)
+        result = self.runner.run(command)
 
     def removeARecord(self, zone, name, recordData=None):
         """ uses Remove-DnsServerResourceRecord cmdlet to remove a record in a zone """
@@ -58,8 +58,40 @@ class DnsServerModule(DNSService):
         flags = ['Force']
 
         command = PowerShellCommand('Remove-DnsServerResourceRecord', *flags, **args)
-        result = self.runner(command)
+        result = self.runner.run(command)
 
+    # ---
+
+    def addTxtRecord(self, zone, name, content, ttl='1h'):
+        """ uses Add-DnsServerResourceRecord cmdlet to add txt resource in a zone """
+
+        command = PowerShellCommand(
+            'Add-DnsServerResourceRecord',
+            'AllowUpdateAny',
+             'Txt',
+            ZoneName=zone,
+            Name=name,
+            DescriptiveText=content,
+            TimeToLive=self._formatTtl(ttl)
+        )
+
+        result = self.runner.run(command)
+
+    def removeARecord(self, zone, name, recordData=None):
+        """ uses Remove-DnsServerResourceRecord cmdlet to remove txt record in a zone """
+
+        args = {
+            'Zone': zone
+        }
+        if name:
+            args['Name'] = name
+        if recordData:
+            args['RecordData'] = recordData
+
+        flags = ['Force']
+
+        command = PowerShellCommand('Remove-DnsServerResourceRecord', *flags, **args)
+        result = self.runner.run(command)
 
     # ---
 
@@ -87,16 +119,20 @@ class DnsServerModule(DNSService):
 
         units = ttl.split(' ')
         for unit in units:
-            if 'h' in ttl:
-                hour = int(ttl[-1])
+            print('h' in unit)
+            if 'h' in unit:
+                hour = int(unit[:-1])
+                continue
             elif 'm' in ttl:
-                minute = int(ttl[-1])
+                minute = int(unit[:-1])
+                continue
             elif 's' in ttl:
-                seconds = int(ttl[-1])
+                seconds = int(unit[:-1])
+                continue
 
             raise Exception("time unit could not be determined [%s]" % unit)
 
         assert hour >= 0 and minute >= 0 and seconds >=0 , ' Time unit can not be negative'
         assert hour > 0 or minute > 0 or seconds > 0, 'At least one time unit must be provided'
 
-        return '%s:%s:%s' % (hour, minute, seconds)
+        return '%02d:%02d:%02d' % (hour, minute, seconds)
