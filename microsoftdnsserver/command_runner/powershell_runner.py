@@ -1,4 +1,5 @@
 import subprocess
+import sys
 
 from .runner import Command, CommandRunner, Result
 from ..util import logger
@@ -63,8 +64,10 @@ class PowerShellRunner(CommandRunner):
         finally:
             pass
 
-        out = out.decode('utf-8')
-        err = err.decode('utf-8')
+        self.logger.debug('using default encoding: [%s]' % sys.stdout.encoding)
+
+        out = out.decode(sys.stdout.encoding, 'replace')
+        err = err.decode(sys.stdout.encoding, 'replace')
 
         self.logger.debug("Returned: \n\tout:[%s], \n\terr:[%s]" % (out, err))
 
