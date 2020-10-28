@@ -1,0 +1,3 @@
+{
+  "GetDnsServerResponse1": "{\"DistinguishedName\":\"@\",\"HostName\":\"@\",\"RecordClass\":\"IN\",\"RecordData\":{\"CimClass\":\"root/Microsoft/Windows/DNS:DnsServerResourceRecordA\",\"CimInstanceProperties\":\"IPv4Address=\\\"34.65.234.38\\\"\",\"CimSystemProperties\":\"Microsoft.Management.Infrastructure.CimSystemProperties\"},\"RecordType\":\"A\",\"Timestamp\":null,\"TimeToLive\":{\"Ticks\":36000000000,\"Days\":0,\"Hours\":1,\"Milliseconds\":0,\"Minutes\":0,\"Seconds\":0,\"TotalDays\":0.041666666666666664,\"TotalHours\":1,\"TotalMilliseconds\":3600000,\"TotalMinutes\":60,\"TotalSeconds\":3600},\"PSComputerName\":null}"
+}

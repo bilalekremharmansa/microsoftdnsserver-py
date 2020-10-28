@@ -1,15 +1,15 @@
 import subprocess
-import sys
 
 from .runner import Command, CommandRunner, Result
+from ..util import logger
 
-DEBUG = True
 
-POWERSHELL_EXE_PATH="C:\Windows\syswow64\WindowsPowerShell\\v1.0\powershell.exe"
+DEFAULT_POWERSHELL_EXE_PATH = "C:\Windows\syswow64\WindowsPowerShell\\v1.0\powershell.exe"
+
 
 class PowerShellCommand(Command):
 
-    def __init__(self, cmdlet, *flags, **args):
+    def __init__(self, cmdlet: str, *flags, **args):
         super().__init__()
 
         self.cmdlet = cmdlet
@@ -17,7 +17,7 @@ class PowerShellCommand(Command):
         self.args = args
 
     def prepareCommand(self):
-        cmd = [POWERSHELL_EXE_PATH, self.cmdlet]
+        cmd = [self.cmdlet]
 
         # add flags, ie -Force
         for flag in self.flags:
@@ -39,26 +39,37 @@ class PowerShellCommand(Command):
 
 class PowerShellRunner(CommandRunner):
 
-    def run(self, command):
-        assert (command, PowerShellCommand)
+    def __init__(self, powerShellPath: str = None):
+        self.logger = logger.createLogger("PowerShellRunner")
+
+        self.powerShellPath = powerShellPath
+        if powerShellPath is None:
+            self.powerShellPath = DEFAULT_POWERSHELL_EXE_PATH
+
+    def run(self, command: PowerShellCommand) -> Result:
+        assert isinstance(command, PowerShellCommand)
 
         cmd = command.prepareCommand()
+        cmd.insert(0, self.powerShellPath)
 
-        if DEBUG:
-            print(' '.join(cmd))
-            return
+        self.logger.debug("Running: [%s]" % ' '.join(cmd))
 
-        proc = subprocess.Popen(cmd, stdout=sys.stdout)
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         try:
-            out, _ = proc.communicate(timeout=60)
+            out, err = proc.communicate(timeout=60)
         except:
             proc.kill()
-            out, _ = proc.communicate()
+            out, err = proc.communicate()
         finally:
             pass
 
+        out = out.decode('utf-8')
+        err = err.decode('utf-8')
+
+        self.logger.debug("Returned: \n\tout:[%s], \n\terr:[%s]" % (out, err))
+
         success = proc.returncode == 0
-        return Result(success, proc.returncode, out)
+        return Result(success, proc.returncode, out, err)
 
 
 

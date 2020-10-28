@@ -1,8 +1,27 @@
+from enum import Enum
+
+
+class RecordType(Enum):
+    A = 'A'
+    TXT = 'Txt'
+
+    @staticmethod
+    def list():
+        return [t.value for t in RecordType]
+
+    @staticmethod
+    def value_of(value):
+        return next((t for t in RecordType if t.value == value))
+
+
 class Record(object):
 
-    def __init__(self, zone, name, type, content, ttl=1):
+    def __init__(self, zone: str, name: str, recordType: RecordType, content: str, ttl: str = '1h'):
         self.zone = zone
         self.name = name
-        self.type = type
+        self.type = recordType
         self.content = content
         self.ttl = ttl
+
+    def __repr__(self):
+        return '[%s] record - zone: [%s], name: [%s]' % (self.type, self.zone, self.name)

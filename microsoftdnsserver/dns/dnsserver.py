@@ -1,8 +1,11 @@
-import logging
+import json
 
-from microsoftdnsserver.command_runner.powershell_runner import PowerShellCommand
+from microsoftdnsserver.command_runner.runner import Command, CommandRunner
+from microsoftdnsserver.command_runner.powershell_runner import PowerShellCommand, PowerShellRunner
 from .base import DNSService
-from ..util import dns_server_utils
+from .record import RecordType
+from ..util import dns_server_utils, logger
+
 
 class DnsServerModule(DNSService):
     """
@@ -11,26 +14,15 @@ class DnsServerModule(DNSService):
         https://docs.microsoft.com/en-us/powershell/module/dnsserver/?view=win10-ps
     """
 
-    def __init__(self, runner):
+    def __init__(self, runner: CommandRunner = None):
         super().__init__()
         self.runner = runner
+        if runner is None:
+            self.runner = PowerShellRunner()
 
-        self.logger = None
-        pass
+        self.logger = logger.createLogger("DnsServer")
 
-    def _initLogger(self):
-        handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-        handler.setFormatter(formatter)
-
-        logger = logging.getLogger()
-        logger.addHandler(handler)
-        logger.setLevel(logging.DEBUG)
-
-        self.logger = logger
-
-
-    def getDNSRecords(self, zone, name=None, recordType=None):
+    def getDNSRecords(self, zone: str, name: str = None, recordType: RecordType = None):
         """ uses Get-DnsServerResourceRecord cmdlet to get records in a zone """
 
         args = {
@@ -40,13 +32,15 @@ class DnsServerModule(DNSService):
         if name:
             args['Name'] = name
         if recordType:
-            args['RRType'] = recordType
+            args['RRType'] = recordType.value
 
         command = PowerShellCommand('Get-DnsServerResourceRecord', **args)
-        self.run(command)
+        result = self.run(command)
 
+        jsonResult = json.loads(result.out)
+        return dns_server_utils.formatDnsServerResult(zone, jsonResult)
 
-    def addARecord(self, zone, name, ip, ttl='1h', ageRecord=False):
+    def addARecord(self, zone: str, name: str, ip: str, ttl: str = '1h'):
         """ uses Add-DnsServerResourceRecordA cmdlet to add a resource in a zone """
 
         command = PowerShellCommand(
@@ -58,9 +52,10 @@ class DnsServerModule(DNSService):
             TimeToLive=dns_server_utils.formatTtl(ttl)
         )
 
-        self.run(command)
+        result = self.run(command)
+        return result.success
 
-    def removeARecord(self, zone, name, recordData=None):
+    def removeARecord(self, zone: str, name: str):
         """ uses Remove-DnsServerResourceRecord cmdlet to remove a record in a zone """
 
         args = {
@@ -69,17 +64,17 @@ class DnsServerModule(DNSService):
         }
         if name:
             args['Name'] = name
-        if recordData:
-            args['RecordData'] = recordData
 
         flags = ['Force']
 
         command = PowerShellCommand('Remove-DnsServerResourceRecord', *flags, **args)
-        self.run(command)
+        result = self.run(command)
+
+        return result
 
     # ---
 
-    def addTxtRecord(self, zone, name, content, ttl='1h'):
+    def addTxtRecord(self, zone: str, name: str, content: str, ttl: str = '1h'):
         """ uses Add-DnsServerResourceRecord cmdlet to add txt resource in a zone """
 
         command = PowerShellCommand(
@@ -92,9 +87,11 @@ class DnsServerModule(DNSService):
             TimeToLive=dns_server_utils.formatTtl(ttl)
         )
 
-        self.run(command)
+        result = self.run(command)
 
-    def removeTxtRecord(self, zone, name, recordData=None):
+        return result.success
+
+    def removeTxtRecord(self, zone: str, name: str):
         """ uses Remove-DnsServerResourceRecord cmdlet to remove txt record in a zone """
 
         args = {
@@ -103,21 +100,23 @@ class DnsServerModule(DNSService):
         }
         if name:
             args['Name'] = name
-        if recordData:
-            args['RecordData'] = recordData
 
         flags = ['Force']
 
         command = PowerShellCommand('Remove-DnsServerResourceRecord', *flags, **args)
-        self.run(command)
+        result = self.run(command)
+
+        return result.success
 
     # --
 
-    def run(self, command):
+    def run(self, command: Command):
         result = self.runner.run(command)
 
         if not result.success:
             self.logger.error("Command failed [%s]" % command.prepareCommand())
+
+        return result
 
     def isDnsServerModuleInstalled(self):
         cmdlet = "Get-Module DNSServer -ListAvailable"
