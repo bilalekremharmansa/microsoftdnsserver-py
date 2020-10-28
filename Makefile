@@ -6,10 +6,13 @@ endif
 twine = ${python} -m twine
 pip = ${python} -m pip
 
-upload: build
+upload: build-module
 	@${twine} upload dist/* -r testpypi
 
-build:
+upload-prod: build-module
+	@${twine} upload dist/* -r pypi
+
+build-module:
 	rm -rf build
 	rm -rf dist
 	${python} setup.py sdist

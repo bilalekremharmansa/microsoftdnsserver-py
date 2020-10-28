@@ -119,7 +119,7 @@ class DnsServerModule(DNSService):
         return result
 
     def isDnsServerModuleInstalled(self):
-        cmdlet = "Get-Module DNSServer -ListAvailable"
-        result = self.runner.run(cmdlet)
+        command = PowerShellCommand('Get-Module DNSServer', 'ListAvailable')
+        result = self.run(command)
 
         return result.success and len(result.out) > 0
