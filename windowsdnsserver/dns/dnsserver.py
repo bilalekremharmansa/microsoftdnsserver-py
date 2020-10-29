@@ -1,4 +1,5 @@
 import json
+import platform
 from typing import List
 
 from windowsdnsserver.command_runner.runner import Command, CommandRunner
@@ -17,6 +18,9 @@ class DnsServerModule(DNSService):
 
     def __init__(self, runner: CommandRunner = None):
         super().__init__()
+
+        assert platform.system() == 'Windows', "DnsServerModule can run only on a Windows Server"
+
         self.runner = runner
         if runner is None:
             self.runner = PowerShellRunner()
