@@ -12,6 +12,7 @@ Subprocess module is used to perform process calls to interact with DnsServer mo
 ## Installation
 
 ```shell
+pip3 install windowsdnserver-py
 ```
 
 ## Limitations
