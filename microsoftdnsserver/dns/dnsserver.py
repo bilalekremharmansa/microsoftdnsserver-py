@@ -20,7 +20,7 @@ class DnsServerModule(DNSService):
         if runner is None:
             self.runner = PowerShellRunner()
 
-        self.logger = logger.createLogger("DnsServer")
+        self.logger = logger.create_logger("DnsServer")
 
     def getDNSRecords(self, zone: str, name: str = None, recordType: RecordType = None):
         """ uses Get-DnsServerResourceRecord cmdlet to get records in a zone """
@@ -38,7 +38,7 @@ class DnsServerModule(DNSService):
         result = self.run(command)
 
         jsonResult = json.loads(result.out)
-        return dns_server_utils.formatDnsServerResult(zone, jsonResult)
+        return dns_server_utils.transform_dns_server_result(zone, jsonResult)
 
     def addARecord(self, zone: str, name: str, ip: str, ttl: str = '1h'):
         """ uses Add-DnsServerResourceRecordA cmdlet to add a resource in a zone """
@@ -49,7 +49,7 @@ class DnsServerModule(DNSService):
             ZoneName=zone,
             Name=name,
             IPv4Address=ip,
-            TimeToLive=dns_server_utils.formatTtl(ttl)
+            TimeToLive=dns_server_utils.format_ttl(ttl)
         )
 
         result = self.run(command)
@@ -84,7 +84,7 @@ class DnsServerModule(DNSService):
             ZoneName=zone,
             Name=name,
             DescriptiveText=content,
-            TimeToLive=dns_server_utils.formatTtl(ttl)
+            TimeToLive=dns_server_utils.format_ttl(ttl)
         )
 
         result = self.run(command)
