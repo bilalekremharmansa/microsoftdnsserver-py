@@ -18,7 +18,7 @@ class TestDnsServerUtils(unittest.TestCase):
             mock.return_value = Result(True, 0, mock_data['GetDnsServerResponse1'], '')
 
             dns = DnsServerModule()
-            results = dns.getDNSRecords("zone")
+            results = dns.get_dns_records("zone")
             print(results)
             self.assertEqual(len(results), 1)
 
