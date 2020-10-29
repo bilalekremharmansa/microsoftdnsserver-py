@@ -3,7 +3,7 @@ from microsoftdnsserver.exception.exception_common import MethodNotImplementedEr
 
 class Command(object):
 
-    def prepareCommand(self):
+    def build(self):
         raise MethodNotImplementedError()
 
 

@@ -114,7 +114,7 @@ class DnsServerModule(DNSService):
         result = self.runner.run(command)
 
         if not result.success:
-            self.logger.error("Command failed [%s]" % command.prepareCommand())
+            self.logger.error("Command failed [%s]" % command.build())
 
         return result
 
