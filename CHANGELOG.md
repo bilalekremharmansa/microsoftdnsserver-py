@@ -1,4 +1,4 @@
-## microsoftdnsserver-py changelog
+## windowsdnsserver-py changelog
 
 ### version 0.0.2
 

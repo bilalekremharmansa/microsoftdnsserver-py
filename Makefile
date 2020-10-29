@@ -7,8 +7,8 @@ twine = ${python} -m twine
 pip = ${python} -m pip
 
 install-local: build-module
-	${pip} uninstall microsoftdnsserver-py
-	${pip} install microsoftdnsserver-py --no-index --find-links dist/
+	${pip} uninstall windowsdnsserver-py
+	${pip} install windowsdnsserver-py --no-index --find-links dist/
 
 upload: build-module
 	@${twine} upload dist/* -r testpypi

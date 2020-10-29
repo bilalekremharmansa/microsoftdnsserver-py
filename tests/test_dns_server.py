@@ -1,8 +1,8 @@
 import unittest
 
 
-from microsoftdnsserver.dns.dnsserver import DnsServerModule
-from microsoftdnsserver.dns.record import RecordType
+from windowsdnsserver.dns.dnsserver import DnsServerModule
+from windowsdnsserver.dns.record import RecordType
 
 
 class TestDnsServer(unittest.TestCase):

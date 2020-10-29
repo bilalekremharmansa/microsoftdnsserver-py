@@ -4,14 +4,14 @@ with open("README.md", "r") as fd:
     long_description = fd.read()
 
 setuptools.setup(
-    name="microsoftdnsserver-py",
-    version="0.0.2-alpha",
+    name="windowsdnsserver-py",
+    version="0.0.1-alpha",
     author="Bilal Ekrem Harmansa",
     author_email="bilalekremharmansa@gmail.com",
-    description="wrapper Python library for DnsServer module",
+    description="wrapper Python library for Windows Server DnsServer module",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/bilalekremharmansa/microsoftdnsserver-py",
+    url="https://github.com/bilalekremharmansa/windowsdnsserver-py",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -1,7 +1,7 @@
 import unittest
 
-from microsoftdnsserver.dns.record import RecordType
-from microsoftdnsserver.util import dns_server_utils
+from windowsdnsserver.dns.record import RecordType
+from windowsdnsserver.util import dns_server_utils
 
 
 class TestRecords(unittest.TestCase):

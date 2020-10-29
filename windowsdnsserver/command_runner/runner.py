@@ -1,4 +1,4 @@
-from microsoftdnsserver.exception.exception_common import MethodNotImplementedError
+from windowsdnsserver.exception.exception_common import MethodNotImplementedError
 
 
 class Command(object):

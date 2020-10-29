@@ -1,6 +1,6 @@
-## microsoftdnsserver-py
+## windowsdnsserver-py
 
-microsoftdnsserver-py is a wrapper Python library for [DnsServer](https://docs.microsoft.com/en-us/powershell/module/dnsserver/?view=win10-ps) module.
+windowsdnsserver-py is a wrapper Python library for [DnsServer](https://docs.microsoft.com/en-us/powershell/module/dnsserver/?view=win10-ps) module.
 
 Subprocess module is used to perform process calls to interact with DnsServer module.
 

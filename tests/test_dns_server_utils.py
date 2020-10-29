@@ -3,10 +3,10 @@ import json
 
 from unittest.mock import patch
 
-from microsoftdnsserver.command_runner.runner import Result
-from microsoftdnsserver.dns.dnsserver import DnsServerModule
-from microsoftdnsserver.dns.record import RecordType
-from microsoftdnsserver.util.dns_server_utils import parse_ttl, format_ttl
+from windowsdnsserver.command_runner.runner import Result
+from windowsdnsserver.dns.dnsserver import DnsServerModule
+from windowsdnsserver.dns.record import RecordType
+from windowsdnsserver.util.dns_server_utils import parse_ttl, format_ttl
 
 
 class TestDnsServerUtils(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestDnsServerUtils(unittest.TestCase):
     def test_convert_dns_server(self):
         mock_data = self.load_mock_data()
 
-        with patch('microsoftdnsserver.dns.dnsserver.DnsServerModule.run') as mock:
+        with patch('windowsdnsserver.dns.dnsserver.DnsServerModule.run') as mock:
             mock.return_value = Result(True, 0, mock_data['GetDnsServerResponse1'], '')
 
             dns = DnsServerModule()

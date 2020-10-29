@@ -56,7 +56,7 @@ def parse_ttl(time_to_live):
     """
 
     :param time_to_live: DnsServer module's TimeToLive object
-    :return: microsoftdnsserver ttl format
+    :return: Windows DNS Server ttl format
     """
     hours = time_to_live['Hours']
     minutes = time_to_live['Minutes']

@@ -1,8 +1,8 @@
 import json
 from typing import List
 
-from microsoftdnsserver.command_runner.runner import Command, CommandRunner
-from microsoftdnsserver.command_runner.powershell_runner import PowerShellCommand, PowerShellRunner
+from windowsdnsserver.command_runner.runner import Command, CommandRunner
+from windowsdnsserver.command_runner.powershell_runner import PowerShellCommand, PowerShellRunner
 from .base import DNSService
 from .record import RecordType, Record
 from ..util import dns_server_utils, logger

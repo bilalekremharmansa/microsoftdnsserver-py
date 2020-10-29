@@ -1,7 +1,7 @@
 from typing import List
 
-from microsoftdnsserver.dns.record import Record, RecordType
-from microsoftdnsserver.exception.exception_common import MethodNotImplementedError
+from windowsdnsserver.dns.record import Record, RecordType
+from windowsdnsserver.exception.exception_common import MethodNotImplementedError
 
 
 class DNSService(object):
