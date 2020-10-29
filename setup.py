@@ -5,7 +5,7 @@ with open("README.md", "r") as fd:
 
 setuptools.setup(
     name="microsoftdnsserver-py",
-    version="0.0.1",
+    version="0.0.2-alpha",
     author="Bilal Ekrem Harmansa",
     author_email="bilalekremharmansa@gmail.com",
     description="wrapper Python library for DnsServer module",
