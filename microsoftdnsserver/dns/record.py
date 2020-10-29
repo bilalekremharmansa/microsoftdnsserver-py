@@ -16,10 +16,10 @@ class RecordType(Enum):
 
 class Record(object):
 
-    def __init__(self, zone: str, name: str, recordType: RecordType, content: str, ttl: str = '1h'):
+    def __init__(self, zone: str, name: str, record_type: RecordType, content: str, ttl: str = '1h'):
         self.zone = zone
         self.name = name
-        self.type = recordType
+        self.type = record_type
         self.content = content
         self.ttl = ttl
 
