@@ -5,7 +5,7 @@ with open("README.md", "r") as fd:
 
 setuptools.setup(
     name="windowsdnsserver-py",
-    version="0.0.1-dev0",
+    version="0.0.1-dev1",
     author="Bilal Ekrem Harmansa",
     author_email="bilalekremharmansa@gmail.com",
     description="wrapper Python library for Windows Server DnsServer module",
