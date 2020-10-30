@@ -2,6 +2,9 @@
 
 ### version 0.0.1
 
-- naming style changed (camel case -> more pythonic naming style (underscores, lowercase words and etc.)
-- decode DnsServer module output to system default encoding, and replace if error occurs in encoding
-- isDnsServerModuleInstalled fix
+- DnsService implementation with PowerShell DNSServerModule
+- DnsService supports only TXT and A records for now
+- wrapper class to execute PowerShell commands on server -- PowerShellRunner
+- this version of module can be used as python library
+- implemented with pythonic naming style (underscores, lowercase words and etc.)``
+- unit tests are written for current implementation
