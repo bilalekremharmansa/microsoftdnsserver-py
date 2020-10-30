@@ -1,10 +1,11 @@
 import subprocess
+import sys
 
 from .runner import Command, CommandRunner, Result
 from ..util import logger
 
 
-DEFAULT_POWERSHELL_EXE_PATH = "C:\Windows\syswow64\WindowsPowerShell\\v1.0\powershell.exe"
+DEFAULT_POWER_SHELL_EXE_PATH = "C:\Windows\syswow64\WindowsPowerShell\\v1.0\powershell.exe"
 
 
 class PowerShellCommand(Command):
@@ -16,7 +17,7 @@ class PowerShellCommand(Command):
         self.flags = flags
         self.args = args
 
-    def prepareCommand(self):
+    def build(self):
         cmd = [self.cmdlet]
 
         # add flags, ie -Force
@@ -33,24 +34,21 @@ class PowerShellCommand(Command):
 
         return cmd
 
-    def _postProcessResult(self):
-        pass
-
 
 class PowerShellRunner(CommandRunner):
 
-    def __init__(self, powerShellPath: str = None):
-        self.logger = logger.createLogger("PowerShellRunner")
+    def __init__(self, power_shell_path: str = None):
+        self.logger = logger.create_logger("PowerShellRunner")
 
-        self.powerShellPath = powerShellPath
-        if powerShellPath is None:
-            self.powerShellPath = DEFAULT_POWERSHELL_EXE_PATH
+        self.power_shell_path = power_shell_path
+        if power_shell_path is None:
+            self.power_shell_path = DEFAULT_POWER_SHELL_EXE_PATH
 
     def run(self, command: PowerShellCommand) -> Result:
         assert isinstance(command, PowerShellCommand)
 
-        cmd = command.prepareCommand()
-        cmd.insert(0, self.powerShellPath)
+        cmd = command.build()
+        cmd.insert(0, self.power_shell_path)
 
         self.logger.debug("Running: [%s]" % ' '.join(cmd))
 
@@ -63,8 +61,10 @@ class PowerShellRunner(CommandRunner):
         finally:
             pass
 
-        out = out.decode('utf-8')
-        err = err.decode('utf-8')
+        self.logger.debug('using default encoding: [%s]' % sys.stdout.encoding)
+
+        out = out.decode(sys.stdout.encoding, 'replace')
+        err = err.decode(sys.stdout.encoding, 'replace')
 
         self.logger.debug("Returned: \n\tout:[%s], \n\terr:[%s]" % (out, err))
 

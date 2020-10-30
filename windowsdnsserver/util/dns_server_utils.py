@@ -3,9 +3,9 @@ from collections.abc import Iterable
 from ..dns.record import Record, RecordType
 
 
-def formatTtl(ttl):
+def format_ttl(ttl):
     """
-    formatTtl converts given ttl string to Windows-DnsServer module's
+    format_ttl converts given ttl string to Windows-DnsServer module's
     time to live format.
 
     "1h" -> 01:00:00 # a hour
@@ -19,7 +19,7 @@ def formatTtl(ttl):
     At least one time unit must be provided
 
     :param ttl: time to live
-    :return: formatted time to live string for Windows-DnsServer module
+    :return: formatted time to live for Windows-DnsServer module
     """
     assert isinstance(ttl, str)
     assert len(ttl) > 0, "empty ttl value"
@@ -52,10 +52,15 @@ def formatTtl(ttl):
     return '%02d:%02d:%02d' % (hour, minute, seconds)
 
 
-def parseTtl(timeToLive):
-    hours = timeToLive['Hours']
-    minutes = timeToLive['Minutes']
-    seconds = timeToLive['Seconds']
+def parse_ttl(time_to_live):
+    """
+
+    :param time_to_live: DnsServer module's TimeToLive object
+    :return: Windows DNS Server ttl format
+    """
+    hours = time_to_live['Hours']
+    minutes = time_to_live['Minutes']
+    seconds = time_to_live['Seconds']
 
     ttl_str = ''
     if hours:
@@ -70,39 +75,39 @@ def parseTtl(timeToLive):
     return ttl_str[:-1]
 
 
-def isRecordTypeSupported(recordType):
+def is_record_type_supported(recordType):
     return recordType in RecordType.list()
 
 
-def formatDnsServerResult(zone, cmdletResults):
-    if not isinstance(cmdletResults, list):
-        cmdletResults = [cmdletResults]
+def transform_dns_server_result(zone, cmdlet_results):
+    if not isinstance(cmdlet_results, list):
+        cmdlet_results = [cmdlet_results]
 
-    recordResults = []
-    for result in cmdletResults:
+    record_results = []
+    for result in cmdlet_results:
         name = result['HostName']
-        recordType = result['RecordType']
+        record_type = result['RecordType']
 
-        if not isRecordTypeSupported(recordType):
+        if not is_record_type_supported(record_type):
             continue
 
-        recordDataProperties = result['RecordData']['CimInstanceProperties']
+        record_data_props = result['RecordData']['CimInstanceProperties']
 
-        recordData = dict()
-        if isinstance(recordDataProperties, str):
-            key, value = recordDataProperties.split('=')
-            # value's has at begin and end, remove it
-            recordData[key.strip()] = value[1:-1]
+        record_data = dict()
+        if isinstance(record_data_props, str):
+            key, value = record_data_props.split('=')
+            # value's has quotes at beginning and end of value -- remove it
+            record_data[key.strip()] = value[1:-1]
         else:
-            for props in recordDataProperties:
+            for props in record_data_props:
                 key, value = props.split('=')
-                recordData[key.strip()] = value
+                record_data[key.strip()] = value
 
-        assert len(recordData) < 2, "Unexpected data, expected only one record data property, actual: [%s]" % recordData
+        assert len(record_data) < 2, "Unexpected data record, expected only one property, actual: [%s]" % record_data
 
-        content = next(iter(recordData.values()))
-        ttl = parseTtl(result['TimeToLive'])
+        content = next(iter(record_data.values()))
+        ttl = parse_ttl(result['TimeToLive'])
 
-        recordResults.append(Record(zone, name, RecordType.value_of(recordType), content, ttl))
+        record_results.append(Record(zone, name, RecordType.value_of(record_type), content, ttl))
 
-    return recordResults
+    return record_results
