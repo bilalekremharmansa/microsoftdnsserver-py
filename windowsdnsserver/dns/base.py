@@ -21,5 +21,5 @@ class DNSService(object):
     def add_txt_record(self, zone: str, name: str, content, ttl: str) -> bool:
         raise MethodNotImplementedError()
 
-    def remove_txt_record(self, zone: str, name: str) -> bool:
+    def remove_txt_record(self, zone: str, name: str, record_data: str) -> bool:
         raise MethodNotImplementedError()

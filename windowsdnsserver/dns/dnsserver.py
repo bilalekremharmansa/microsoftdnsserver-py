@@ -96,7 +96,7 @@ class DnsServerModule(DNSService):
 
         return result.success
 
-    def remove_txt_record(self, zone: str, name: str) -> bool:
+    def remove_txt_record(self, zone: str, name: str, record_data: str = None) -> bool:
         """ uses Remove-DnsServerResourceRecord cmdlet to remove txt record in a zone """
 
         args = {
@@ -105,6 +105,9 @@ class DnsServerModule(DNSService):
         }
         if name:
             args['Name'] = name
+
+        if record_data:
+            args['RecordData'] = '"%s"' % record_data
 
         flags = ['Force']
 
